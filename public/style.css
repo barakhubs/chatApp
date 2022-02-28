@@ -286,7 +286,8 @@ body{
 {
     overflow-y: scroll;
     overflow-x: hidden;
-    max-height: 450px
+    max-height: 450px;
+    
 }
 
 /** End f scrollbar**/
@@ -296,5 +297,5 @@ body{
 {
     text-align: center;
     vertical-align: middle;
-    line-height: 230px;
+    line-height: 300px;
 }

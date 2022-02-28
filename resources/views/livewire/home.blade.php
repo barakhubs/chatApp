@@ -37,10 +37,16 @@
                                 <div class="chat-about">
                                     @if ($noChat)
                                     <h6 class="m-b-0" style="text-transform: capitalize">{{ 'You are chatting with ' . $current->username}}</h6>
-                                    <small>Last seen: 2 hours ago</small>
+
+                                        @if (Cache::has('is_online' . $item->id))
+                                        <i class="fa fa-circle online"></i> <small>Online</small>
+                                        @else
+                                        <i class="fa fa-circle offline"></i><small>Last seen: {{ \Carbon\Carbon::parse($item->last_seen)->diffForHumans() }} </small>
+                                        @endif
+
                                     @else
-                                    <h6 class="m-b-0">{{ Auth::user()->username }}</h6>
-                                    <small>Select User to chat with!</small>
+                                        <h6 class="m-b-0">{{ Auth::user()->username }}</h6>
+                                        <small>Select User to chat with!</small>
                                     @endif
                                 </div>
                             </div>
@@ -48,43 +54,59 @@
                                 <a href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-camera"></i></a>
                                 <a href="javascript:void(0);" class="btn btn-outline-primary"><i class="fa fa-image"></i></a>
                                 <a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-sign-out"></i></a>
+                                <a href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();"
+                                 class="btn btn-outline-warning"><i class="fa fa-sign-out"></i></a>
+                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </div>
                         </div>
                     </div>
 
                     @if($noChat)
                     <div class="chat-history">
-                        <ul class="m-b-0">
+                        <ul class="m-b-0 p-3 scrollbar-style">
+                           @if ($messages->count() > 0)
+                           @foreach ($messages as $chat)
+                            @if ($chat->sender_id == Auth::user()->id)
                             <li class="clearfix">
-                                <div class="message-data text-right">
-                                    <span class="message-data-time">10:10 AM, Today</span>
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                                </div>
-                                <div class="message other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>
-                            </li>
+                                    <div class="message-data text-right">
+                                        <span class="message-data-time">10:10 AM, Today</span>
+                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+                                    </div>
+                                    <div class="message other-message float-right"> {{ $chat->message }}</div>
+                                </li>
+                            @elseif($chat->sender_id == $receiver)
                             <li class="clearfix">
-                                <div class="message-data">
-                                    <span class="message-data-time">10:12 AM, Today</span>
-                                </div>
-                                <div class="message my-message">Are we meeting today?</div>
-                            </li>
-                            <li class="clearfix">
-                                <div class="message-data">
-                                    <span class="message-data-time">10:15 AM, Today</span>
-                                </div>
-                                <div class="message my-message">Project has been already finished and I have results to show you.</div>
-                            </li>
+                                    <div class="message-data">
+                                        <span class="message-data-time">10:12 AM, Today</span>
+                                    </div>
+                                    <div class="message my-message">{{ $chat->message }}</div>
+                                </li>
+                            @endif
+                           @endforeach
+                           @else
+                           <div style="min-height: auto">
+                                <p class="no-chat-yet">No chats yet!</p>
+                            </div>
+                           @endif
                         </ul>
                     </div>
                     <div class="chat-message clearfix">
                         <form wire:submit.prevent="sendChat">
                             <div class="input-group mb-0">
-                                <input type="text" class="form-control" placeholder="Enter text here..." wire:model.defer="message">
-                                <input type="hidden" wire:model="receiver" value="{{ $current->id }}">
+
+                                <input value="{{ $current->username }}" type="text" class="form-control @error('message') is-invalid @enderror" placeholder="Enter text here..." wire:model.defer="message">
+                                <input type="hidden" value="{{ $current->id }}" wire:model.defer="receiver_id">
+
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-send"></i></span>
                                 </div>
+                                @error('message')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                @enderror
                             </div>
                         </form>
                     </div>

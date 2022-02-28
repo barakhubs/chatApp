@@ -24,5 +24,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     @livewireScripts
 
+    <script>
+        $(document).ready(function(){
+            //var oldscrollHeight = $(".messages").prop("scrollHeight") - 20;
+            //Scroll height before the request
+
+            //--make request here--
+            //var newscrollHeight = $(".messages").prop("scrollHeight") - 20;
+            //Scroll height after the request
+
+            //if (newscrollHeight > oldscrollHeight) {
+              $(".scrollbar-style").animate({ scrollTop: 100000 }, 'fast');
+            //}
+          })
+    </script>
   </body>
 </html>

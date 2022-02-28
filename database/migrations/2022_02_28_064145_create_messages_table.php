@@ -15,6 +15,7 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('thread');
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
             $table->text('message');
@@ -22,6 +23,7 @@ class CreateMessagesTable extends Migration
 
             $table->foreign('sender_id')->references('id')->on('users');
             $table->foreign('receiver_id')->references('id')->on('users');
+            $table->foreign('thread')->references('id')->on('threads');
         });
     }
 
