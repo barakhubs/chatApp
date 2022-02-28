@@ -12,6 +12,7 @@ body{
     border-radius: .55rem;
     position: relative;
     width: 100%;
+    min-height: 500px;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
 }
 .chat-app .people-list {
@@ -51,7 +52,9 @@ body{
 }
 
 .people-list .chat-list li .name {
-    font-size: 15px
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
 .people-list .chat-list img {
@@ -255,4 +258,43 @@ body{
         height: calc(100vh - 350px);
         overflow-x: auto
     }
+}
+
+/*
+ *  Scrollbar
+ */
+
+ .scrollbar-style::-webkit-scrollbar-track
+ {
+     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+     background-color: #F5F5F5;
+ }
+
+ .scrollbar-style::-webkit-scrollbar
+ {
+     width: 2px;
+     background-color: #f5f5f500;
+ }
+
+ .scrollbar-style::-webkit-scrollbar-thumb
+ {
+     background-color: #000000;
+     border: 1px solid #555555;
+ }
+
+.scrollbar-style
+{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 450px
+}
+
+/** End f scrollbar**/
+
+
+.no-chat-yet
+{
+    text-align: center;
+    vertical-align: middle;
+    line-height: 230px;
 }

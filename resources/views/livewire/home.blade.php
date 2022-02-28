@@ -9,49 +9,22 @@
                         </div>
                         <input type="text" class="form-control" placeholder="Search...">
                     </div>
-                    <ul class="list-unstyled chat-list mt-2 mb-0">
-                        <li class="clearfix">
+                    <ul class="list-unstyled chat-list mt-2 mb-0 scrollbar-style">
+                        @foreach ($users as $item)
+                        <li class="clearfix" type="button" wire:click="startChat({{ $item->id }})">
                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
                             <div class="about">
-                                <div class="name">Vincent Porter</div>
-                                <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>
+                                <div class="name">{{ $item->username }}</div>
+                                <div class="status">
+                                    @if (Cache::has('is_online' . $item->id))
+                                    <i class="fa fa-circle online"></i> Online
+                                    @else
+                                    <i class="fa fa-circle offline"></i>last {{ \Carbon\Carbon::parse($item->last_seen)->diffForHumans() }}
+                                    @endif
+                                </div>
                             </div>
                         </li>
-                        <li class="clearfix active">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                            <div class="about">
-                                <div class="name">Aiden Chavez</div>
-                                <div class="status"> <i class="fa fa-circle online"></i> online </div>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar">
-                            <div class="about">
-                                <div class="name">Mike Thomas</div>
-                                <div class="status"> <i class="fa fa-circle online"></i> online </div>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                            <div class="about">
-                                <div class="name">Christian Kelly</div>
-                                <div class="status"> <i class="fa fa-circle offline"></i> left 10 hours ago </div>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="avatar">
-                            <div class="about">
-                                <div class="name">Monica Ward</div>
-                                <div class="status"> <i class="fa fa-circle online"></i> online </div>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar">
-                            <div class="about">
-                                <div class="name">Dean Henry</div>
-                                <div class="status"> <i class="fa fa-circle offline"></i> offline since Oct 28 </div>
-                            </div>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="chat">
@@ -62,18 +35,25 @@
                                     <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
                                 </a>
                                 <div class="chat-about">
-                                    <h6 class="m-b-0">Aiden Chavez</h6>
+                                    @if ($noChat)
+                                    <h6 class="m-b-0" style="text-transform: capitalize">{{ 'You are chatting with ' . $current->username}}</h6>
                                     <small>Last seen: 2 hours ago</small>
+                                    @else
+                                    <h6 class="m-b-0">{{ Auth::user()->username }}</h6>
+                                    <small>Select User to chat with!</small>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-6 hidden-sm text-right">
                                 <a href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-camera"></i></a>
                                 <a href="javascript:void(0);" class="btn btn-outline-primary"><i class="fa fa-image"></i></a>
                                 <a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
-                                <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-question"></i></a>
+                                <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-sign-out"></i></a>
                             </div>
                         </div>
                     </div>
+
+                    @if($noChat)
                     <div class="chat-history">
                         <ul class="m-b-0">
                             <li class="clearfix">
@@ -98,13 +78,21 @@
                         </ul>
                     </div>
                     <div class="chat-message clearfix">
-                        <div class="input-group mb-0">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-send"></i></span>
+                        <form wire:submit.prevent="sendChat">
+                            <div class="input-group mb-0">
+                                <input type="text" class="form-control" placeholder="Enter text here..." wire:model.defer="message">
+                                <input type="hidden" wire:model="receiver" value="{{ $current->id }}">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-send"></i></span>
+                                </div>
                             </div>
-                            <input type="text" class="form-control" placeholder="Enter text here...">
-                        </div>
+                        </form>
                     </div>
+                    @else
+                    <div style="min-height: auto">
+                        <p class="no-chat-yet">Select user from the left panel to chat with!</p>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
