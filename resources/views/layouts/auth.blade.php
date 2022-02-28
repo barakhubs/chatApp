@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>Simple Login Form Example</title>
+  <title>ChatApp::Authentication</title>
   <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Rubik:400,700'><link rel="stylesheet" href="./style.css">
 
   <style>
@@ -14,7 +14,7 @@
       }
 
       body {
-        background: #e35869;
+        background: #f1f1f1;
         font-family: 'Rubik', sans-serif;
       }
 
@@ -114,13 +114,34 @@
       .login-form .action button:nth-child(2):hover {
         background: #3c4d6d;
       }
+      .is-invalid {
+        border-color: #dc3545;
+      }
+      .text-danger {
+        font-size: 12px;
+        color: #dc3545;
+      }
   </style>
+  @livewireStyles
+  @toastr_css
 </head>
 <body>
-<!-- partial:index.partial.html -->
+    <!-- partial:index.partial.html -->
+        @yield('content')
+    <!-- partial -->
 
-<!-- partial -->
-
-
+    @jquery
+    @livewireScripts
+    @toastr_js
+    @toastr_render
+    <script>
+        window.addEventListener('alert', event => {
+                    toastr[event.detail.type](event.detail.message,
+                    event.detail.title ?? ''), toastr.options = {
+                        "closeButton": true,
+                        "progressBar": true,
+                    }
+                });
+    </script>
 </body>
 </html>
