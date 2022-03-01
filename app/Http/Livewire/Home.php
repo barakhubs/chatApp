@@ -20,6 +20,7 @@ class Home extends Component
     public $message;
     public $thread;
     public $receiver_id;
+    public $notification;
 
     protected $rules = ['message' => 'required'];
 
@@ -31,9 +32,10 @@ class Home extends Component
 
         $this->current_user = Auth::user()->id;
 
+        // change to chat read
+        $notifications = Message::where('thread', $this->current_user.'-'.$this->receiver)->orWhere('thread', $this->receiver.'-'.$this->current_user)->update(['is_read' => '1']);
+
     }
-
-
 
     public function updated($propertyName)
     {
@@ -75,10 +77,16 @@ class Home extends Component
     {
         // All variables
         $user = Auth::user()->id;
+
         $receiver = $this->receiver;
+
         $current = User::find($receiver);
+
+
+        // get all users
         $users = User::where('id', '!=', $user)->get();
 
+        // get all chats
         $messages = Message::where('thread', $user.'-'.$receiver)->orWhere('thread', $receiver.'-'.$user)->get();
 
         return view('livewire.home', compact('messages', 'users', 'current'));

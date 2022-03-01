@@ -14,7 +14,16 @@
                         <li class="clearfix" type="button" wire:click="startChat({{ $item->id }})">
                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
                             <div class="about">
-                                <div class="name">{{ $item->username }}</div>
+                                <div class="name">
+                                    {{ $item->username }}
+                                    @php
+                                        // get notifcations/un read messages
+                                        $notifications = App\Models\Message::where('is_read', '0')->where('sender_id', $item->id)->get();
+                                    @endphp
+                                    @if ($notifications->count() > 0)
+                                        <small><span class="badge badge-danger text-light">{{ $notifications->count() }}</span></small>
+                                    @endif
+                                </div>
                                 <div class="status">
                                     @if (Cache::has('is_online' . $item->id))
                                     <i class="fa fa-circle online"></i> Online
@@ -38,7 +47,7 @@
                                     @if ($noChat)
                                     <h6 class="m-b-0" style="text-transform: capitalize">{{ 'You are chatting with ' . $current->username}}</h6>
 
-                                        @if (Cache::has('is_online' . $item->id))
+                                        @if (Cache::has('is_online' . $current->id))
                                         <i class="fa fa-circle online"></i> <small>Online</small>
                                         @else
                                         <i class="fa fa-circle offline"></i><small>Last seen: {{ \Carbon\Carbon::parse($current->last_seen)->diffForHumans() }} </small>

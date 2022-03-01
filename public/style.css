@@ -12,7 +12,7 @@ body{
     border-radius: .55rem;
     position: relative;
     width: 100%;
-    min-height: 500px;
+    min-height: 450px;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
 }
 .chat-app .people-list {
@@ -287,7 +287,7 @@ body{
     overflow-y: scroll;
     overflow-x: hidden;
     max-height: 450px;
-    
+
 }
 
 /** End f scrollbar**/
