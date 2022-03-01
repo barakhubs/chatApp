@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Http\Livewire\Auth as LivewireAuth;
 use App\Models\Message;
 use Livewire\Component;
 
@@ -12,41 +13,27 @@ use App\Models\Thread;
 
 class Home extends Component
 {
-    public $receiver;
-
-    public $sender;
-
-    public $message;
-
-    public $receiver_id;
-
     public $noChat = false;
 
-    public $check;
-
+    public $receiver;
+    public $current_user;
+    public $message;
     public $thread;
-
-    public $user;
+    public $receiver_id;
 
     protected $rules = ['message' => 'required'];
 
-    public function startChat ($id)
+    public function startChat($id)
     {
         $this->noChat = true;
 
         $this->receiver = $id;
 
-        $this->user = Auth::user()->id;
-
-        $get_thread = Thread::where('sender', $user)->where('receiver', $receiver)->first()->id;
-
-        if($get_thread){
-            $this->thread = $get_thread;
-        }else{
-            $this->thread = 0;
-        }
+        $this->current_user = Auth::user()->id;
 
     }
+
+
 
     public function updated($propertyName)
     {
@@ -57,36 +44,43 @@ class Home extends Component
     {
         $this->validate();
 
-        $receiver = $this->receiver;
+        $thread_value = $this->current_user . '-' .$this->receiver;
 
-
-
+        if($this->thread = 0){
+            Message::create([
+                'thread' => $thread_value,
+                'message' => $this->message,
+                'receiver_id' => $this->receiver,
+                'sender_id' => $this->current_user
+            ]);
+        }else{
+            Message::create([
+                'thread' => $thread_value,
+                'message' => $this->message,
+                'receiver_id' => $this->receiver,
+                'sender_id' => $this->current_user
+            ]);
         }
 
         $this->clearForm();
 
     }
+
     public function clearForm ()
     {
         $this->message = "";
     }
 
-    public function render()
+    public function render ()
     {
-        // select current user to chat with
+        // All variables
+        $user = Auth::user()->id;
         $receiver = $this->receiver;
-
         $current = User::find($receiver);
+        $users = User::where('id', '!=', $user)->get();
 
-        // select all users
-        $users = User::get()->where('id', '!=', Auth::user()->id);
+        $messages = Message::where('thread', $user.'-'.$receiver)->orWhere('thread', $receiver.'-'.$user)->get();
 
-        // Retrive messages between the two parties
-
-        $check = $this->thread;
-
-        $messages = Message::where('thread', $check)->get();
-
-        return view('livewire.home', compact('users', 'current', 'receiver', 'messages'));
+        return view('livewire.home', compact('messages', 'users', 'current'));
     }
 }

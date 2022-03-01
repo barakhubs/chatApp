@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" wire:poll>
     <div class="row clearfix">
         <div class="col-lg-12">
             <div class="card chat-app">
@@ -41,7 +41,7 @@
                                         @if (Cache::has('is_online' . $item->id))
                                         <i class="fa fa-circle online"></i> <small>Online</small>
                                         @else
-                                        <i class="fa fa-circle offline"></i><small>Last seen: {{ \Carbon\Carbon::parse($item->last_seen)->diffForHumans() }} </small>
+                                        <i class="fa fa-circle offline"></i><small>Last seen: {{ \Carbon\Carbon::parse($current->last_seen)->diffForHumans() }} </small>
                                         @endif
 
                                     @else
@@ -68,20 +68,20 @@
                     @if($noChat)
                     <div class="chat-history">
                         <ul class="m-b-0 p-3 scrollbar-style">
-                           @if ($messages->count() > 0)
+                           @if ($messages->count())
                            @foreach ($messages as $chat)
-                            @if ($chat->sender_id == Auth::user()->id)
+                            @if ($chat->sender_id == Auth::user()->id && $chat->receiver_id == $receiver)
                             <li class="clearfix">
                                     <div class="message-data text-right">
-                                        <span class="message-data-time">10:10 AM, Today</span>
+                                        <span class="message-data-time"><small>{{ $chat->created_at->diffForHumans() }}</small></span>
                                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
                                     </div>
                                     <div class="message other-message float-right"> {{ $chat->message }}</div>
                                 </li>
-                            @elseif($chat->sender_id == $receiver)
+                            @elseif($chat->sender_id == $receiver && $chat->receiver_id == Auth::user()->id)
                             <li class="clearfix">
                                     <div class="message-data">
-                                        <span class="message-data-time">10:12 AM, Today</span>
+                                        <span class="message-data-time"><small>{{ $chat->created_at->diffForHumans() }}</small></span>
                                     </div>
                                     <div class="message my-message">{{ $chat->message }}</div>
                                 </li>
@@ -98,8 +98,8 @@
                         <form wire:submit.prevent="sendChat">
                             <div class="input-group mb-0">
 
-                                <input value="{{ $current->username }}" type="text" class="form-control @error('message') is-invalid @enderror" placeholder="Enter text here..." wire:model.defer="message">
-                                <input type="hidden" value="{{ $current->id }}" wire:model.defer="receiver_id">
+                                <input type="text" class="form-control @error('message') is-invalid @enderror" placeholder="Enter text here..." wire:model.defer="message">
+                                <input type="hidden" value="{{ $receiver }}" wire:model.defer="receiver_id">
 
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fa fa-send"></i></span>

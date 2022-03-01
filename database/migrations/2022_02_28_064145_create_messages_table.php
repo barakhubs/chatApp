@@ -15,15 +15,15 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('thread');
+            $table->string('thread')->default('0');
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
             $table->text('message');
+            $table->enum('is_read', ['0', '1'])->default('0');
             $table->timestamps();
 
             $table->foreign('sender_id')->references('id')->on('users');
             $table->foreign('receiver_id')->references('id')->on('users');
-            $table->foreign('thread')->references('id')->on('threads');
         });
     }
 
