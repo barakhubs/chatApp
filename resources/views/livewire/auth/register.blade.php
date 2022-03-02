@@ -4,6 +4,31 @@
           <h1>Register</h1>
           <div class="content">
             <div class="input-field">
+                <input type="text" placeholder="First Name" value="{{ old('first_name') }}" class="@error('first_name') is-invalid @enderror" autocomplete="nope" wire:model.defer="first_name">
+                @error('first_name')
+                      <span class="text-danger" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                @enderror
+              </div>
+              <div class="input-field">
+                <input type="text" placeholder="Last Name" value="{{ old('last_name') }}" class="@error('last_name') is-invalid @enderror" autocomplete="nope" wire:model.defer="last_name">
+                @error('last_name')
+                      <span class="text-danger" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                @enderror
+              </div>
+              <div class="input-field">
+                <input type="file" placeholder="Avator" value="{{ old('avator') }}" class="@error('avator') is-invalid @enderror" autocomplete="nope" wire:model.defer="avator">
+                @error('avator')
+                      <span class="text-danger" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                @enderror
+              </div>
+
+            <div class="input-field">
               <input type="text" placeholder="Username" value="{{ old('username') }}" class="@error('username') is-invalid @enderror" autocomplete="nope" wire:model.defer="username">
               @error('username')
                     <span class="text-danger" role="alert">

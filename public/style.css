@@ -169,13 +169,13 @@ body{
 
 .chat .chat-history .other-message {
     background: #e8f1f3;
-    text-align: right
+    text-align: right;
 }
 
-.chat .chat-history .other-message:after {
+/* .chat .chat-history .other-message:after {
     border-bottom-color: #e8f1f3;
-    left: 93%
-}
+    left: 10%;
+} */
 
 .chat .chat-message {
     padding: 20px

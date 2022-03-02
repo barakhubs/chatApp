@@ -8,6 +8,12 @@ use Livewire\Component;
 
 class Register extends Component
 {
+    public $first_name;
+
+    public $last_name;
+
+    public $avator;
+
     public $username;
 
     public $email;
@@ -22,6 +28,9 @@ class Register extends Component
     }
 
     protected $rules = [
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'avator' => 'image',
         'username' => 'required|unique:users,username',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:6|confirmed'
@@ -53,6 +62,12 @@ class Register extends Component
 
     public function clearForm ()
     {
+        $this->first_name = "";
+
+        $this->last_name = "";
+
+        $this->avator = "";
+
         $this->username = "";
 
         $this->email = "";
