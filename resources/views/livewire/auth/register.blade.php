@@ -20,7 +20,13 @@
                 @enderror
               </div>
               <div class="input-field">
-                <input type="file" placeholder="Avator" value="{{ old('avator') }}" class="@error('avator') is-invalid @enderror" autocomplete="nope" wire:model.defer="avator">
+                @if ($avator)
+                <div>
+                    <label for="name" class="col-form-label">{{ __('Image Preview') }}</label>
+                    <img src="{{ $avator->temporaryUrl() }}" class="img-thumbnail" style="border-radius: 50px; height:50px; width:50px;" alt="Preview">
+                </div>
+                @endif
+                <input type="file" value="{{ old('avator') }}" class="@error('avator') is-invalid @enderror" autocomplete="nope" wire:model.defer="avator">
                 @error('avator')
                       <span class="text-danger" role="alert">
                           <strong>{{ $message }}</strong>

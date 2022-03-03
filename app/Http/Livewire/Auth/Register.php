@@ -5,9 +5,13 @@ namespace App\Http\Livewire\Auth;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 
 class Register extends Component
 {
+    use WithFileUploads;
+
     public $first_name;
 
     public $last_name;
@@ -30,7 +34,7 @@ class Register extends Component
     protected $rules = [
         'first_name' => 'required',
         'last_name' => 'required',
-        'avator' => 'image',
+        'avator' => 'image|max:1024',
         'username' => 'required|unique:users,username',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:6|confirmed'
@@ -47,11 +51,21 @@ class Register extends Component
 
         $this->password = Hash::make($this->password);
 
+        $avator = $this->avator;
+        $avator = $this->username.'-'.$avator->extension();
+
         User::create([
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'avator' => $avator,
             'username' => $this->username,
             'email' => $this->email,
             'password' => $this->password
         ]);
+
+        // Store file in the public folder
+        $this->avator->storeAs('public/avators', $avator);
+        $this->clearForm();
 
         $this->dispatchBrowserEvent('alert',
                 ['type' => 'success',  'message' => 'Account created successfully!']);

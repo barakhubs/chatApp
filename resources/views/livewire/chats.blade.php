@@ -78,24 +78,24 @@
                     <div class="chat-history">
                         <ul class="m-b-0 p-3 scrollbar-style" id="content_to_scroll">
                            @if ($messages->count())
-                           @foreach ($messages as $chat)
-                            @if ($chat->sender_id == Auth::user()->id && $chat->receiver_id == $receiver)
-                                <li class="clearfix">
-                                    <div class="message my-message float-right"> {{ $chat->message }} </div>
-                                    <div class="message-data text-right">
-                                        <span class="message-data-time"><small>{{ $chat->created_at->diffForHumans() }}</small></span>
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                                    </div>
-                                </li>
-                            @elseif($chat->sender_id == $receiver && $chat->receiver_id == Auth::user()->id)
-                                <li class="clearfix">
-                                    <div class="message-data">
-                                        <span class="message-data-time"><small>{{ $chat->created_at->diffForHumans() }}</small></span>
-                                    </div>
-                                    <div class="message my-message">{{ $chat->message }}</div>
-                                </li>
-                            @endif
-                           @endforeach
+                            @foreach ($messages as $chat)
+                                @if ($chat->sender_id == Auth::user()->id && $chat->receiver_id == $receiver)
+                                    <li class="clearfix">
+                                        <div class="message my-message float-right"> {{ $chat->message }} </div>
+                                        <div class="message-data text-right">
+                                            <span class="message-data-time"><small>{{ $chat->created_at->diffForHumans() }}</small></span>
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
+                                        </div>
+                                    </li>
+                                @elseif($chat->sender_id == $receiver && $chat->receiver_id == Auth::user()->id)
+                                    <li class="clearfix">
+                                        <div class="message-data">
+                                            <span class="message-data-time"><small>{{ $chat->created_at->diffForHumans() }}</small></span>
+                                        </div>
+                                        <div class="message my-message">{{ $chat->message }}</div>
+                                    </li>
+                                @endif
+                            @endforeach
                            @else
                            <div style="min-height: auto">
                                 <p class="no-chat-yet">No chats yet!</p>

@@ -3,8 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Http\Livewire\Auth as LivewireAuth;
+use App\Models\Favorite;
 use App\Models\Message;
+use App\Models\Friend;
 use Livewire\Component;
+
+use Session;
 
 use Auth;
 
@@ -73,6 +77,90 @@ class Home extends Component
         $this->message = "";
     }
 
+    public function addFavorite ($id)
+    {
+        $check = Favorite::where('message', $id)->first();
+
+        if ($check) {
+            Favorite::where('message', $id)->delete();
+        }else{
+            Favorite::create(['message' => $id]);
+        }
+
+    }
+
+    /**
+     * This function is for deleting the message
+     * What it does is beasically not deleting the row from the database but updating the message to a 0 value.
+     * On echo, It will check if the value is 0, then display message deleted as ou can see it from the front end
+     *
+     * It also clears the message from the favorites
+     */
+    public function deleteMessage ($id)
+    {
+        Message::find($id)->update(['message' => '0']);
+
+        Favorite::where('message', $id)->delete();
+
+    }
+
+    /**
+     * Logout function
+     */
+    public function logout ()
+    {
+        Session::flush();
+
+        Auth::logout();
+
+        return redirect()->route('login');
+    }
+
+    /**
+     * Clear all Chats With Current Useer
+     *
+     */
+    public function clearChats ()
+    {
+        // All variables
+        $user = Auth::user()->id;
+
+        $receiver = $this->receiver;
+
+        $get_messages = Message::where('thread', $user.'-'.$receiver)->orWhere('thread', $receiver.'-'.$user)->get();
+
+        // Favorite::where('message', $get_messages)->destroy();
+        foreach($get_messages as $message){
+            $message->delete();
+        }
+    }
+
+    /**
+     * Function to make fiend favorite
+     */
+
+     public function addFriend ($id)
+     {
+         Friend::create(['friend' => $id, 'user' => Auth::user()->id]);
+     }
+
+     /**
+     * Function to remove friend
+     */
+
+    public function removeFriend ($id)
+    {
+        Friend::where('friend', $id)->delete();
+    }
+
+    /**
+     * View profile of an active user you are chatting with
+     */
+    public function viewProfile ($id)
+    {
+        
+    }
+
     public function render ()
     {
         // All variables
@@ -82,13 +170,15 @@ class Home extends Component
 
         $current = User::find($receiver);
 
-
         // get all users
         $users = User::where('id', '!=', $user)->get();
+
+        // check if current user is friend
+        $friend = Friend::where('friend', $current)->first();
 
         // get all chats
         $messages = Message::where('thread', $user.'-'.$receiver)->orWhere('thread', $receiver.'-'.$user)->get();
 
-        return view('livewire.home', compact('messages', 'users', 'current'));
+        return view('livewire.home', compact('messages', 'users', 'current', 'friend'));
     }
 }
