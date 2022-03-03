@@ -73,7 +73,7 @@
 
 							</div>
 							<div>
-                                <button wire:click="clearChats" onclick="confirm('Are you sure of clearing chats?')" class="btn btn-light border px-3" title="Clear Chats"><spanc class="fa fa-refresh"></span></button>
+                                <button wire:click="clearChats" onclick="confirm('Are you sure of clearing chats?')" class="btn btn-light border px-3" title="Clear Chats"><span class="fa fa-trash"></span></button>
 								<button class="btn btn-light border px-3" title="Friends"><spanc class="fa fa-users"></span></button>
                                 <button class="btn btn-light border mr-1 px-3" title="Favorites"><span class="fa fa-star text-warning"></span></button>
 								<button class="btn btn-light border mr-1 px-3 d-none d-md-inline-block" title="S"><span class="fa fa-cog"></span></button>
