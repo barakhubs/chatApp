@@ -1,25 +1,41 @@
+# Chat App
 
-## About Chat App
+A real-time chat application built with Laravel 7 and Livewire.
 
-Chat App is a simple application developed using laravel 7 and Livewire. It has he following features
-- Real time chatting
-- Real time delete, add to favorite, notifications, wipe all chats
-- Real time add friend to favorites
-- Real time auth validation
-- New message notification
+## Features
 
-## Screenshots
+- Real-time one-to-one messaging
+- Add/remove friends, with real-time updates
+- Favorite conversations, with real-time toggling
+- Real-time message deletion and "wipe all chats"
+- Real-time authentication validation
+- New message notifications
+
+## Tech stack
+
+- PHP / Laravel 7
+- Livewire (real-time server-rendered components)
+- MySQL
+
+## Getting started
+
+```bash
+composer install
+npm install && npm run dev
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
 
 ## Demo
 
-Check this link for demo [https://chatappdemo.barakhub.com/](target="_blank" https://chatappdemo.barakhub.com/) or check video here [https://chatappdemo.barakhub.com/](target="_blank" https://chatappdemo.barakhub.com/)
+A live demo is available at https://chatappdemo.barakhub.com/
 
-Please support me by giving it a star.
+## Testing
 
-## Contributing
+PHPUnit is configured; the repository currently includes only the default Laravel example tests.
 
-Thank you for considering contributing to this app. For any feature you want to add please reach out to me [markbrightbaraka22@gmail.com](mailto:markbrightbaraka22@gmail.com).
+## Status
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+12 commits (Feb–Mar 2022), single author. Deployed with a working public demo.
